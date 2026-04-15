@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MOLLHA ASHRAFUL | Portfolio</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,23 +12,59 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        .bg-mesh {
+        
+        :root {
+            color-scheme: dark;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth;
             background-color: #020617;
+        }
+
+        .bg-mesh {
             background-image: 
                 radial-gradient(at 0% 0%, rgba(220, 38, 38, 0.05) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(29, 78, 216, 0.05) 0px, transparent 50%);
         }
-        .typing-cursor::after { content: '|'; animation: blink 1s infinite; color: #dc2626; }
+
+        .typing-cursor::after { 
+            content: '|'; 
+            animation: blink 1s infinite; 
+            color: #dc2626; 
+        }
+
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
         .hover-lift { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .hover-lift:hover { transform: translateY(-10px) scale(1.02); }
-        .scrolling-text { white-space: nowrap; animation: scroll 20s linear infinite; }
-        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .border-gradient { border-image: linear-gradient(to bottom, #dc2626, transparent) 1; border-left-width: 2px; }
+
+        .scrolling-text { 
+            white-space: nowrap; 
+            animation: scroll 20s linear infinite; 
+            display: inline-block;
+        }
+
+        @keyframes scroll { 
+            from { transform: translateX(0); } 
+            to { transform: translateX(-50%); } 
+        }
+
+        .border-gradient { 
+            border-image: linear-gradient(to bottom, #dc2626, transparent) 1; 
+            border-left-width: 2px; 
+        }
+
+        /* Fix for mobile text rendering */
+        h1, h2, h3, p, span {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
     </style>
 </head>
-<body class="bg-[#020617] text-slate-300 selection:bg-red-600/30 selection:text-white overflow-x-hidden bg-mesh" 
+<body class="text-slate-300 selection:bg-red-600/30 selection:text-white overflow-x-hidden bg-mesh" 
       x-data="{ scrolled: false, selectedProject: null, typeText: '', fullText: 'PIXEL PERFECT', charIndex: 0 }" 
       x-init="
         window.addEventListener('scroll', () => scrolled = window.scrollY > 50);
@@ -152,7 +188,7 @@
                         <div class="relative pl-8 group">
                             <div class="absolute left-[-9px] top-1.5 w-4 h-4 rounded-full bg-white/10 group-hover:bg-red-600 transition-colors"></div>
                             <span class="text-slate-500 font-bold text-[11px] tracking-widest uppercase">2018 - 2020</span>
-                            <h4 class="text-xl font-bold text-white mt-1">Sreenagar Gove College</h4>
+                            <h4 class="text-xl font-bold text-white mt-1">Sreenagar Govt College</h4>
                             <p class="text-slate-400 text-sm font-medium">Secondary School 卒業</p>
                         </div>
                     </div>
@@ -205,6 +241,14 @@
         </div>
     </section>
 
+    <!-- Scrolling Text Overlay -->
+    <div class="py-20 bg-white/[0.01] border-y border-white/5 overflow-hidden flex whitespace-nowrap">
+        <div class="scrolling-text text-[8vh] md:text-[10vh] font-black text-white/5 uppercase select-none flex gap-20">
+            <span>Precision Coding • Pixel Perfect • Reliable Engineering • Responsive UI • Japanese Standard</span>
+            <span>Precision Coding • Pixel Perfect • Reliable Engineering • Responsive UI • Japanese Standard</span>
+        </div>
+    </div>
+
     <!-- Contact Section -->
     <footer id="about" class="py-32 md:py-60 bg-[#020617] relative">
         <div class="max-w-6xl mx-auto px-6 relative z-10">
@@ -238,7 +282,7 @@
                 <div class="lg:col-span-5 pt-12 md:pt-0">
                     <div class="p-10 border border-white/10 rounded-[3rem] bg-white/[0.02] backdrop-blur-xl relative group overflow-hidden shadow-2xl">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-red-600 opacity-5 blur-[60px] group-hover:opacity-15 transition-opacity duration-500"></div>
-                        <h4 class="text-white font-black text-xs uppercase tracking-[0.4em] mb-10 border-b border-white/10 pb-6">Final Summary</h4>
+                        <h4 class="text-white font-black text-xs uppercase tracking-[0.4em] mb-10 border-b border-white/10 pb-6">Professional Profile</h4>
                         <ul class="space-y-10">
                             <li class="flex items-start gap-5">
                                 <i data-lucide="code" class="text-red-600 w-6 h-6 shrink-0 mt-1"></i>
@@ -268,7 +312,7 @@
     <!-- Detail Modal -->
     <div x-show="selectedProject" x-transition class="fixed inset-0 z-[100] flex items-center justify-center p-6" style="display: none;">
         <div class="absolute inset-0 bg-black/95 backdrop-blur-3xl" @click="selectedProject = null"></div>
-        <div class="relative bg-[#0d1633] w-full max-w-4xl rounded-[4rem] p-12 md:p-20 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="relative bg-[#0d1633] w-full max-w-3xl rounded-[4rem] p-12 md:p-20 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto">
             <button @click="selectedProject = null" class="absolute top-10 right-10 text-slate-500 hover:text-red-600 transition-all"><i data-lucide="x" class="w-10 h-10"></i></button>
             <h3 class="text-4xl md:text-6xl font-black text-white mb-2 uppercase tracking-tighter leading-none" x-text="selectedProject?.title"></h3>
             <p class="text-red-600 font-black text-xs uppercase tracking-widest mb-12" x-text="selectedProject?.jpTitle"></p>
