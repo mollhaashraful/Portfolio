@@ -2,33 +2,24 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MOLLHA ASHRAFUL | Portfolio</title>
     
-    <!-- Preconnect for faster loading -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (Simple Script) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Alpine.js -->
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
-        :root { color-scheme: dark; }
-
-        /* Alpine Cloak to prevent flicker */
-        [x-cloak] { display: none !important; }
-
-        html, body {
+        body {
             width: 100%;
             height: 100%;
             margin: 0;
@@ -37,6 +28,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif; 
             scroll-behavior: smooth;
             background-color: #020617;
+            color: #cbd5e1;
             -webkit-text-size-adjust: 100%;
         }
 
@@ -57,7 +49,7 @@
 
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        .hover-lift { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .hover-lift { transition: transform 0.4s ease; }
         @media (hover: hover) {
             .hover-lift:hover { transform: translateY(-10px) scale(1.02); }
         }
@@ -79,29 +71,24 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Responsive utility for dynamic viewport height on mobile */
-        .min-h-dvh { min-height: 100vh; min-height: 100dvh; }
+        /* Nav Transition Class */
+        .nav-scrolled {
+            background-color: rgba(5, 10, 31, 0.95);
+            backdrop-filter: blur(12px);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
     </style>
 </head>
-<body class="text-slate-300 selection:bg-red-600/30 selection:text-white bg-mesh w-full max-w-full overflow-x-hidden" 
-      x-data="{ scrolled: false, selectedProject: null, typeText: '', fullText: 'PIXEL PERFECT', charIndex: 0, mobileMenuOpen: false }" 
-      x-init="
-        window.addEventListener('scroll', () => scrolled = window.scrollY > 50);
-        const typingInterval = setInterval(() => {
-            if (charIndex < fullText.length) {
-                typeText += fullText[charIndex];
-                charIndex++;
-            } else {
-                clearInterval(typingInterval);
-            }
-        }, 150);
-      ">
+<body class="bg-mesh w-full max-w-full overflow-x-hidden">
 
-    <!-- Wrapper to ensure no horizontal scroll -->
+    <!-- Wrapper -->
     <div class="w-full max-w-full overflow-x-hidden relative flex flex-col min-h-screen">
 
         <!-- Navigation -->
-        <nav class="fixed top-0 w-full z-50 transition-all duration-500" :class="scrolled ? 'bg-[#050a1f]/95 backdrop-blur-xl py-3 border-b border-white/5 shadow-2xl' : 'bg-transparent py-5 md:py-8'">
+        <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-5 md:py-8">
             <div class="max-w-6xl mx-auto px-5 lg:px-6 flex justify-between items-center text-white w-full">
                 <div class="font-black text-xl sm:text-2xl tracking-tighter cursor-pointer hover:scale-105 transition-transform" onclick="window.scrollTo({top:0, behavior:'smooth'})">
                     ASHRAFUL<span class="text-red-600">.</span>
@@ -121,26 +108,19 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-white p-2 focus:outline-none" aria-label="Toggle Menu">
-                    <i data-lucide="menu" class="w-7 h-7" x-show="!mobileMenuOpen"></i>
-                    <i data-lucide="x" class="w-7 h-7" x-show="mobileMenuOpen" x-cloak></i>
+                <button onclick="toggleMenu()" class="md:hidden text-white p-2 focus:outline-none" aria-label="Toggle Menu">
+                    <i data-lucide="menu" class="w-7 h-7" id="menu-icon-open"></i>
+                    <i data-lucide="x" class="w-7 h-7 hidden" id="menu-icon-close"></i>
                 </button>
             </div>
         </nav>
 
         <!-- Mobile Menu Overlay -->
-        <div x-show="mobileMenuOpen" x-cloak
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 -translate-y-10"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-10"
-             class="fixed inset-0 z-40 bg-[#020617]/98 backdrop-blur-3xl flex flex-col items-center justify-center gap-8 md:hidden w-full h-full pt-16">
-            <a href="#skills" @click="mobileMenuOpen = false" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">技術スキル</a>
-            <a href="#work" @click="mobileMenuOpen = false" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">制作実績</a>
-            <a href="#history" @click="mobileMenuOpen = false" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">学歴・職歴</a>
-            <a href="#about" @click="mobileMenuOpen = false" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">お問い合わせ</a>
+        <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-[#020617]/98 backdrop-blur-3xl flex-col items-center justify-center gap-8 md:hidden w-full h-full pt-16 transition-opacity">
+            <a href="#skills" onclick="toggleMenu()" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">技術スキル</a>
+            <a href="#work" onclick="toggleMenu()" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">制作実績</a>
+            <a href="#history" onclick="toggleMenu()" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">学歴・職歴</a>
+            <a href="#about" onclick="toggleMenu()" class="text-xl font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors w-full text-center py-4">お問い合わせ</a>
             
             <div class="mt-8 flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
                 <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
@@ -149,16 +129,16 @@
         </div>
 
         <!-- Hero Section (FV) -->
-        <section class="relative min-h-dvh flex items-center pt-24 pb-12 px-5 lg:px-6 w-full">
+        <section class="relative min-h-screen flex items-center pt-24 pb-12 px-5 lg:px-6 w-full">
             <div class="max-w-6xl mx-auto w-full z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 
-                <div class="order-2 lg:order-1 animate-in fade-in slide-in-from-left duration-1000 w-full">
+                <div class="order-2 lg:order-1 w-full">
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-600/10 border border-red-600/20 mb-6 lg:mb-8">
                         <span class="text-red-500 text-[10px] font-black uppercase tracking-[0.3em]">Frontend Developer</span>
                     </div>
                     <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.1] lg:leading-[0.9] mb-6 lg:mb-10 w-full break-words">
                         CODING <br class="hidden sm:block" />
-                        <span class="text-red-600 typing-cursor" x-text="typeText"></span>
+                        <span class="text-red-600 typing-cursor" id="typewriter"></span>
                     </h1>
                     <p class="text-base sm:text-lg md:text-2xl text-slate-400 font-light leading-relaxed max-w-xl mb-8 lg:mb-12">
                         私は<span class="text-white font-bold underline decoration-red-600/30 underline-offset-8">モッラ アシュラフル</span>です。<br class="hidden md:block"/>
@@ -171,7 +151,7 @@
                     </div>
                 </div>
 
-                <div class="order-1 lg:order-2 relative flex justify-center lg:justify-end animate-in fade-in slide-in-from-right duration-1000 w-full mt-10 lg:mt-0">
+                <div class="order-1 lg:order-2 relative flex justify-center lg:justify-end w-full mt-10 lg:mt-0">
                     <div class="relative w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[450px] aspect-[4/5] rounded-[3rem] lg:rounded-[4rem] overflow-hidden border border-white/5 shadow-2xl group bg-[#0a1128] mx-auto lg:mx-0">
                         <img src="https://lh3.googleusercontent.com/d/1frGbfGwtTTnsVA68X-AGnQuH4tWLcF3M" alt="Profile" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out scale-105 group-hover:scale-100">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/20 to-transparent opacity-90 lg:opacity-80"></div>
@@ -289,7 +269,7 @@
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 w-full">
                     <!-- Project 1 -->
-                    <div @click="selectedProject = { title: 'High-Conversion LP', jpTitle: '高精度LP実装', desc: 'Japanese market conversion optimization using semantic markup.', logic: '修正のしやすさと読み込み速度を意識した、高品質なマークアップ設計。' }" 
+                    <div onclick="openModal('High-Conversion LP', '高精度LP実装', 'Japanese market conversion optimization using semantic markup.', '修正のしやすさと読み込み速度を意識した、高品質なマークアップ設計。')" 
                          class="group relative aspect-square sm:aspect-video lg:aspect-[4/3] bg-[#0a1128] rounded-[2.5rem] lg:rounded-[4rem] overflow-hidden border border-white/5 cursor-pointer hover:border-red-600/30 transition-all duration-700 shadow-2xl w-full">
                         <div class="absolute inset-0 bg-gradient-to-br from-red-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         <div class="absolute top-6 left-6 lg:top-12 lg:left-12 pr-6">
@@ -304,7 +284,7 @@
                         </div>
                     </div>
                     <!-- Project 2 -->
-                    <div @click="selectedProject = { title: 'Adaptive UI Kit', jpTitle: 'レスポンシブ基盤の構築', desc: 'A flexible UI system designed for multi-platform integration.', logic: 'CSS GridとFlexboxを組み合わせた、デバイスに依存しない堅牢なレイアウト。' }" 
+                    <div onclick="openModal('Adaptive UI Kit', 'レスポンシブ基盤の構築', 'A flexible UI system designed for multi-platform integration.', 'CSS GridとFlexboxを組み合わせた、デバイスに依存しない堅牢なレイアウト。')" 
                          class="group relative aspect-square sm:aspect-video lg:aspect-[4/3] bg-[#0a1128] rounded-[2.5rem] lg:rounded-[4rem] overflow-hidden border border-white/5 cursor-pointer hover:border-red-600/30 transition-all duration-700 shadow-2xl w-full">
                         <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         <div class="absolute top-6 left-6 lg:top-12 lg:left-12 pr-6">
@@ -392,37 +372,115 @@
 
     </div> <!-- End Main Wrapper -->
 
-    <!-- Detail Modal -->
-    <div x-show="selectedProject" x-cloak
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 w-full h-full">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" @click="selectedProject = null"></div>
-        <div class="relative bg-[#0d1633] w-full max-w-3xl rounded-[2.5rem] lg:rounded-[4rem] p-8 sm:p-12 lg:p-20 border border-white/10 shadow-2xl max-h-[90dvh] overflow-y-auto overflow-x-hidden flex flex-col">
-            <button @click="selectedProject = null" class="absolute top-5 sm:top-8 lg:top-10 right-5 sm:right-8 lg:right-10 text-slate-500 hover:text-red-600 transition-all focus:outline-none">
+    <!-- Modal (Vanilla JS Controlled) -->
+    <div id="project-modal" class="hidden fixed inset-0 z-[100] flex-col items-center justify-center p-4 sm:p-6 w-full h-full transition-opacity duration-300 opacity-0">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeModal()"></div>
+        <div class="relative bg-[#0d1633] w-full max-w-3xl rounded-[2.5rem] lg:rounded-[4rem] p-8 sm:p-12 lg:p-20 border border-white/10 shadow-2xl max-h-[90dvh] overflow-y-auto overflow-x-hidden flex flex-col z-10 transform scale-95 transition-transform duration-300" id="modal-content">
+            <button onclick="closeModal()" class="absolute top-5 sm:top-8 lg:top-10 right-5 sm:right-8 lg:right-10 text-slate-500 hover:text-red-600 transition-all focus:outline-none">
                 <i data-lucide="x" class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
             </button>
-            <h3 class="text-3xl sm:text-4xl lg:text-6xl font-black text-white mb-2 uppercase tracking-tighter leading-none break-words pr-10" x-text="selectedProject?.title"></h3>
-            <p class="text-red-600 font-black text-[10px] lg:text-xs uppercase tracking-widest mb-8 lg:mb-12 break-words" x-text="selectedProject?.jpTitle"></p>
+            <h3 id="modal-title" class="text-3xl sm:text-4xl lg:text-6xl font-black text-white mb-2 uppercase tracking-tighter leading-none break-words pr-10"></h3>
+            <p id="modal-jptitle" class="text-red-600 font-black text-[10px] lg:text-xs uppercase tracking-widest mb-8 lg:mb-12 break-words"></p>
             <div class="space-y-8 lg:space-y-12 flex-1">
-                <p class="text-slate-400 text-sm sm:text-base lg:text-xl font-light leading-relaxed" x-text="selectedProject?.desc"></p>
+                <p id="modal-desc" class="text-slate-400 text-sm sm:text-base lg:text-xl font-light leading-relaxed"></p>
                 <div class="pt-8 lg:pt-10 border-t border-white/5">
                     <h4 class="text-[10px] font-black text-red-500 uppercase tracking-widest mb-4 lg:mb-6 italic underline underline-offset-8 decoration-4">Technical Logic</h4>
-                    <p class="text-white text-sm sm:text-base lg:text-lg font-light leading-relaxed" x-text="selectedProject?.logic"></p>
+                    <p id="modal-logic" class="text-white text-sm sm:text-base lg:text-lg font-light leading-relaxed"></p>
                 </div>
             </div>
-            <button @click="selectedProject = null" class="mt-10 lg:mt-16 w-full bg-red-600 text-white py-5 sm:py-6 lg:py-8 rounded-[2rem] lg:rounded-[2.5rem] font-black text-xs tracking-[0.3em] uppercase hover:bg-white hover:text-black transition-all shadow-2xl focus:outline-none shrink-0">
+            <button onclick="closeModal()" class="mt-10 lg:mt-16 w-full bg-red-600 text-white py-5 sm:py-6 lg:py-8 rounded-[2rem] lg:rounded-[2.5rem] font-black text-xs tracking-[0.3em] uppercase hover:bg-white hover:text-black transition-all shadow-2xl focus:outline-none shrink-0">
                 Close Project
             </button>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
+        // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+                nav.classList.remove('bg-transparent', 'py-5', 'md:py-8');
+            } else {
+                nav.classList.remove('nav-scrolled');
+                nav.classList.add('bg-transparent', 'py-5', 'md:py-8');
+            }
+        });
+
+        // Typewriter Effect
+        const fullText = "PIXEL PERFECT";
+        let charIndex = 0;
+        const typeTextElement = document.getElementById("typewriter");
+        
+        const typingInterval = setInterval(() => {
+            if (charIndex < fullText.length) {
+                typeTextElement.innerHTML += fullText[charIndex];
+                charIndex++;
+            } else {
+                clearInterval(typingInterval);
+            }
+        }, 150);
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+
+        function toggleMenu() {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex');
+                setTimeout(() => mobileMenu.style.opacity = '1', 10);
+                iconOpen.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+            } else {
+                mobileMenu.style.opacity = '0';
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                    iconOpen.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Modal Controls
+        const modal = document.getElementById('project-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        function openModal(title, jpTitle, desc, logic) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-jptitle').innerText = jpTitle;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-logic').innerText = logic;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Small delay for transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
     </script>
 </body>
 </html>
